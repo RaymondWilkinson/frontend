@@ -52,8 +52,7 @@ metadata:
   name: demo-frontend-scaler
 spec:
   scaleTargetRef:
-    kind: ReplicaSet
-    name: frontend-demo
+    frontedBy: frontend-demo-service
   minReplicas: 3
   maxReplicas: 10
   targetCPUUtilizationPercentage: 50
