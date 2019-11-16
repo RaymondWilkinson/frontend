@@ -40,6 +40,7 @@ spec:
   selector:
     source: demo
     app: spinnaker
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
