@@ -1,26 +1,41 @@
-apiVersion: apps/v1beta2
-kind: Deployment
+kind: Service
+apiVersion: v1
 metadata:
-  name: spinnaker-demo
+  name: frontend-demo-service
+  namespace: default
+spec:
+  selector:
+    frontedBy: frontend-demo-service
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  annotations:
+    strategy.spinnaker.io/max-version-history: '2'
+    traffic.spinnaker.io/load-balancers: '["service frontend-demo-service"]'
+  name: frontend-demo
   namespace: default
   labels:
-    source: demo
-    stack: frontend
-    app: spinnaker
+    app: frontend-demo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      source: demo
-      app: spinnaker
+      app: frontend-demo
   template:
     metadata:
       labels:
-        source: demo
-        app: spinnaker
+        app: frontend-demo
     spec:
       containers:
-        - name: primary
+        - name: demo-frontend
           image: 134925024091.dkr.ecr.eu-west-2.amazonaws.com/demo-frontend
           ports:
             - containerPort: 80
@@ -31,17 +46,14 @@ spec:
 
 ---
 
-kind: Service
-apiVersion: v1
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
 metadata:
-  name: spinnaker-demo
-  namespace: default
+  name: demo-frontend-scaler
 spec:
-  selector:
-    source: demo
-    app: spinnaker
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+  scaleTargetRef:
+    kind: ReplicaSet
+    name: frontend-demo
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
