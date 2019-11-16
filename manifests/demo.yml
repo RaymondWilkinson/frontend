@@ -25,11 +25,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: frontend-demo
+      applicationName: frontend-demo
   template:
     metadata:
       labels:
-        app: frontend-demo
+        applicationName: frontend-demo
     spec:
       containers:
         - name: demo-frontend
