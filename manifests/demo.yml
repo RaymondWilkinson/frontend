@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    frontedBy: frontend-demo-service
+    app: frontend-demo
   type: LoadBalancer
   ports:
     - protocol: TCP
@@ -16,10 +16,6 @@ spec:
 
 apiVersion: apps/v1
 kind: ReplicaSet
-metadata:
-  annotations:
-    strategy.spinnaker.io/max-version-history: '2'
-    traffic.spinnaker.io/load-balancers: '["service frontend-demo-service"]'
   name: frontend-demo
   namespace: default
   labels:
