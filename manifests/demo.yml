@@ -18,6 +18,7 @@ apiVersion: apps/v1beta2
 kind: ReplicaSet
 metadata:
   annotations:
+    strategy.spinnaker.io/max-version-history: '2'
     strategy.spinnaker.io/use-source-capacity: 'true'
   name: frontend-demo
   namespace: default
