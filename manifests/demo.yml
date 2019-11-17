@@ -38,6 +38,9 @@ spec:
         - name: demo-frontend
           image: 134925024091.dkr.ecr.eu-west-2.amazonaws.com/demo-frontend
           imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 200m
           ports:
             - containerPort: 80
           readinessProbe:
